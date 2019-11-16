@@ -8,23 +8,45 @@
 
 import Foundation
 
-public class MapKey<ValueType> {
-    public let definitions: MapKeyDefinitions
-    public fileprivate(set) var name = "<tbd>"
+public struct QualifiedName: Equatable, Hashable {
+    let namespace: String
+    let label: String
+}
+
+fileprivate protocol NamedOnce {
+    var name: QualifiedName {get}
+    func setNameOnce(name: QualifiedName) throws
+}
+
+public struct AlreadyNamed: Error {
+    let existingName: QualifiedName
+    let newName: QualifiedName
+}
+
+public class MapKey<ValueType>: NamedOnce {
+    public var _name: QualifiedName!
+    public var name: QualifiedName { _name }
     
-    init(definitions: MapKeyDefinitions) {
-        self.definitions = definitions
+    public func setNameOnce(name: QualifiedName) throws {
+        if _name == nil {
+           _name = name
+        } else {
+            throw AlreadyNamed(existingName: _name, newName: name)
+        }
     }
 }
 
-open class MapKeyDefinitions {
+open class MapKeys {
     public private(set) var namespace: String
     
     init(namespace: String) {
         self.namespace = namespace
-    }
-
-    func key<ValueType>() -> MapKey<ValueType> {
-        MapKey(definitions: self)
+        let mirror = Mirror(reflecting: self)
+        for child in mirror.children {
+            if let key = child.value as? NamedOnce {
+                try! key.setNameOnce(name: QualifiedName(namespace: namespace,
+                                                         label: child.label!))
+            }
+        }
     }
 }
