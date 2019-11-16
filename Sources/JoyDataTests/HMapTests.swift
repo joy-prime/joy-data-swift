@@ -17,10 +17,10 @@ struct MyStruct {
     let s: String
 }
 
-class MyKeys: JoyData.MapKeys {
-    let myInt: MapKey<Int> = MapKey()
-    let myString: MapKey<String> = MapKey()
-    let myStruct: MapKey<MyStruct> = MapKey()
+class MyKeys: HMapKeys {
+    let myInt: HMapKey<Int> = HMapKey()
+    let myString: HMapKey<String> = HMapKey()
+    let myStruct: HMapKey<MyStruct> = HMapKey()
 }
 let myKeys = MyKeys(namespace: myNamespace)
 

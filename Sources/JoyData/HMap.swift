@@ -23,7 +23,9 @@ public struct AlreadyNamed: Error {
     let newName: QualifiedName
 }
 
-public class MapKey<ValueType>: NamedOnce {
+public class HMapKey<ValueType>: NamedOnce {
+    // This has to be a class to make it mutable when it is the value of an immutable member.
+    
     public var _name: QualifiedName!
     public var name: QualifiedName { _name }
     
@@ -36,7 +38,7 @@ public class MapKey<ValueType>: NamedOnce {
     }
 }
 
-open class MapKeys {
+open class HMapKeys {
     public private(set) var namespace: String
     
     init(namespace: String) {
@@ -49,4 +51,8 @@ open class MapKeys {
             }
         }
     }
+}
+
+public struct HMap {
+    
 }
