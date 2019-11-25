@@ -1,5 +1,5 @@
 //
-//  Map.swift
+//  HMap.swift
 //  joy-data-swift
 //
 //  Created by Dean Thompson on 11/11/19.
@@ -53,6 +53,9 @@ open class HMapKeys {
     }
 }
 
-public struct HMap {
+public protocol HMap {
     
+}
+
+public struct ShadowingHMap: HMap {
 }

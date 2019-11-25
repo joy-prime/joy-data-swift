@@ -1,5 +1,5 @@
 //
-//  Tests.swift
+//  HMapTests.swift
 //  Tests
 //
 //  Created by Dean Thompson on 11/15/19.
@@ -24,7 +24,7 @@ class MyKeys: HMapKeys {
 }
 let myKeys = MyKeys(namespace: myNamespace)
 
-class Tests: XCTestCase {
+class HMapTests: XCTestCase {
     
     func testMapKeys() {
         XCTAssert(myKeys.myInt.name == QualifiedName(namespace: myNamespace,
