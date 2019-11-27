@@ -53,9 +53,44 @@ open class HMapKeys {
     }
 }
 
-public protocol HMap {
+public struct HMap: Sequence {
+    public typealias Element = (QualifiedName, Any)
+    public typealias Iterator = DefaultPersistentMap<QualifiedName, Any>.Iterator
     
-}
+    private typealias Storage = DefaultPersistentMap<QualifiedName, Any>
+    private let storage: Storage
+    
+    public init() {
+        storage = Storage()
+    }
+    
+    public init<S: Sequence>(_ seq: S) where S.Element == Element {
+        storage = seq.reduce(Storage(),
+                             { (s, kv) in s.with(kv.0, kv.1) })
+    }
+    
+    private init(storage: Storage) {
+        self.storage = storage
+    }
+    
+    public func with<Value>(_ hkey: HMapKey<Value>, _ value: Value) -> HMap {
+        HMap(storage.with(hkey.name, value))
+    }
+    
+    public func removing<Value>(_ hkey: HMapKey<Value>) -> HMap {
+        HMap(storage.removing(hkey.name))
+    }
+    
+    public __consuming func makeIterator() -> HMap.Iterator {
+        storage.makeIterator()
+    }
+    
+    public subscript<Value>(hkey: HMapKey<Value>) -> Value? {
+        if let a = storage[hkey.name] {
+            return a as? Value
+        } else {
+            return nil
+        }
 
-public struct ShadowingHMap: HMap {
+    }
 }

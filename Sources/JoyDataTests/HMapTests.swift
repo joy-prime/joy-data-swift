@@ -26,12 +26,25 @@ let myKeys = MyKeys(namespace: myNamespace)
 
 class HMapTests: XCTestCase {
     
-    func testMapKeys() {
-        XCTAssert(myKeys.myInt.name == QualifiedName(namespace: myNamespace,
-                                                     label: "myInt"))
-        XCTAssert(myKeys.myString.name == QualifiedName(namespace: myNamespace,
-                                                        label: "myString"))
-        XCTAssert(myKeys.myStruct.name == QualifiedName(namespace: myNamespace,
-                                                        label: "myStruct"))
+    func testKeys() {
+        XCTAssertEqual(myKeys.myInt.name,
+                       QualifiedName(namespace: myNamespace, label: "myInt"))
+        
+        XCTAssertEqual(myKeys.myString.name,
+                       QualifiedName(namespace: myNamespace, label: "myString"))
+        
+        XCTAssertEqual(myKeys.myStruct.name,
+                       QualifiedName(namespace: myNamespace, label: "myStruct"))
+    }
+    
+    func testOperations() {
+        var h = HMap()
+        XCTAssertNil(h[myKeys.myInt])
+        
+        h = h.with(myKeys.myInt, 42)
+        XCTAssertEqual(h[myKeys.myInt], 42)
+        
+        h = h.removing(myKeys.myInt)
+        XCTAssertNil(h[myKeys.myInt])
     }
 }

@@ -19,6 +19,8 @@ public protocol PersistentMap: Sequence {
     func removing(_: Key) -> Self
 }
 
+public typealias DefaultPersistentMap = ShadowMap
+
 /// A `PersistentMap` from `Key` to `Value`, implemented with `Dictionary` values
 /// that shadow other `Dictionary` values. The details of the cost model are complex,
 /// but operations are at worst O(log N).
